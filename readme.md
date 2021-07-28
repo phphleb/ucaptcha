@@ -1,6 +1,8 @@
 UCaptcha
 =====================
 
+### ![CAPTCHA EXAMPLE](https://raw.githubusercontent.com/phphleb/ucaptcha/d474f82c23f5f97d615b2c3b405927f293b02a2d/resources/dark.png)
+### ![CAPTCHA EXAMPLE](https://raw.githubusercontent.com/phphleb/ucaptcha/d474f82c23f5f97d615b2c3b405927f293b02a2d/resources/base.png)
 ### ![CAPTCHA EXAMPLE](https://raw.githubusercontent.com/phphleb/ucaptcha/32af2717ccc99c7953751dc12f561210c51c1f82/resources/3d.png)
 ## Universal Captcha
 
