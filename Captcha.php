@@ -8,9 +8,9 @@ class Captcha implements CaptchaInterface
 {
     const CHARS = '123456789ABCDFGHIJKLMNPQSXTUVWY';
 
-    const SESSION_CAPTCHA_NAME = 'CAPTCHA_3D_VALUE';
+    const SESSION_CAPTCHA_NAME = 'UCAPTCHA_VALUE';
 
-    const SESSION_CAPTCHA_PASSED = 'CAPTCHA_3D_PASSED';
+    const SESSION_CAPTCHA_PASSED = 'UCAPTCHA_PASSED';
 
     const TYPES = ['base', 'dark', '3d'];
 
