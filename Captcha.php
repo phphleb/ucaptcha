@@ -12,6 +12,8 @@ class Captcha implements CaptchaInterface
 
     const SESSION_CAPTCHA_PASSED = 'UCAPTCHA_PASSED';
 
+    const SESSION_LAST_CAPTCHA = 'UCAPTCHA_LAST_CODE';
+
     const TYPES = ['base', 'dark', '3d'];
 
     const TYPE_BASE = 'base';
@@ -21,6 +23,8 @@ class Captcha implements CaptchaInterface
     const TYPE_3D = '3d';
 
     protected $code;
+
+    protected $status = null;
 
     protected $type = self::TYPE_BASE;
 
@@ -46,14 +50,27 @@ class Captcha implements CaptchaInterface
      */
     public function check(string $code)
     {
+        if (is_bool($this->status)) {
+            return $this->status;
+        }
+
         if (!isset($_SESSION)) @session_start();
 
-        if (in_array(strlen($code), [5, 6]) && !empty($_SESSION[self::SESSION_CAPTCHA_NAME]) && strtoupper($_SESSION[self::SESSION_CAPTCHA_NAME]) === strtoupper($code)) {
+        if (
+            // Проверка на совпадение.
+            in_array(strlen($code), [5, 6]) && !empty($_SESSION[self::SESSION_CAPTCHA_NAME]) && $_SESSION[self::SESSION_CAPTCHA_NAME] === strtoupper($code) &&
+            // Проверка на уникальность запроса, повторный вернет ошибку.
+            $_SESSION[self::SESSION_LAST_CAPTCHA] ?? null !== $_SESSION[self::SESSION_CAPTCHA_NAME]
+        ) {
             $_SESSION[self::SESSION_CAPTCHA_PASSED] = 1;
+            $_SESSION[self::SESSION_LAST_CAPTCHA] = strtoupper($code);
 
-            return true;
+            $this->status = true;
+        } else {
+            $this->status = false;
         }
-        return false;
+
+        return $this->status;
     }
 
     /**
