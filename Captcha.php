@@ -24,7 +24,7 @@ class Captcha implements CaptchaInterface
 
     protected $code;
 
-    protected $status = null;
+    protected static $status = null;
 
     protected $type = self::TYPE_BASE;
 
@@ -50,8 +50,8 @@ class Captcha implements CaptchaInterface
      */
     public function check(string $code)
     {
-        if (is_bool($this->status)) {
-            return $this->status;
+        if (is_bool(self::$status)) {
+            return self::$status;
         }
 
         if (!isset($_SESSION)) @session_start();
@@ -65,12 +65,12 @@ class Captcha implements CaptchaInterface
             $_SESSION[self::SESSION_CAPTCHA_PASSED] = 1;
             $_SESSION[self::SESSION_LAST_CAPTCHA] = strtoupper($code);
 
-            $this->status = true;
+            self::$status = true;
         } else {
-            $this->status = false;
+            self::$status = false;
         }
 
-        return $this->status;
+        return self::$status;
     }
 
     /**
