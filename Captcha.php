@@ -8,11 +8,11 @@ class Captcha implements CaptchaInterface
 {
     const CHARS = '123456789ABCDFGHIJKLMNPQSXTUVWY';
 
-    const SESSION_CAPTCHA_NAME = 'UCAPTCHA_VALUE';
+    const SESSION_CAPTCHA_NAME = 'UCAPTCHA_VALUES';
 
     const SESSION_CAPTCHA_PASSED = 'UCAPTCHA_PASSED';
 
-    const SESSION_LAST_CAPTCHA = 'UCAPTCHA_LAST_CODE';
+    const MAX_LIST_VALUES = 6;
 
     const TYPES = ['base', 'dark', '3d'];
 
@@ -23,8 +23,6 @@ class Captcha implements CaptchaInterface
     const TYPE_3D = '3d';
 
     protected $code;
-
-    protected static $status = null;
 
     protected $type = self::TYPE_BASE;
 
@@ -50,27 +48,14 @@ class Captcha implements CaptchaInterface
      */
     public function check(string $code)
     {
-        if (is_bool(self::$status)) {
-            return self::$status;
-        }
-
         if (!isset($_SESSION)) @session_start();
 
-        if (
-            // Проверка на совпадение.
-            in_array(strlen($code), [5, 6]) && !empty($_SESSION[self::SESSION_CAPTCHA_NAME]) && $_SESSION[self::SESSION_CAPTCHA_NAME] === strtoupper($code) &&
-            // Проверка на уникальность запроса, повторный вернет ошибку.
-            $_SESSION[self::SESSION_LAST_CAPTCHA] ?? null !== $_SESSION[self::SESSION_CAPTCHA_NAME]
-        ) {
+        if (in_array(strlen($code), [5, 6]) && $this->checkAllCodeList($code)) {
             $_SESSION[self::SESSION_CAPTCHA_PASSED] = 1;
-            $_SESSION[self::SESSION_LAST_CAPTCHA] = strtoupper($code);
 
-            self::$status = true;
-        } else {
-            self::$status = false;
+            return true;
         }
-
-        return self::$status;
+        return false;
     }
 
     /**
@@ -85,7 +70,10 @@ class Captcha implements CaptchaInterface
 
         $this->type = in_array($type, self::TYPES) ? $type : self::TYPE_BASE;
 
-        $_SESSION[self::SESSION_CAPTCHA_NAME] = $this->getCode();
+        $_SESSION[self::SESSION_CAPTCHA_NAME][] = $this->getCode();
+        if(count($_SESSION[self::SESSION_CAPTCHA_NAME]) > self::MAX_LIST_VALUES) {
+            array_shift($_SESSION[self::SESSION_CAPTCHA_NAME]);
+        }
 
         $firstBackground = imagecreatefrompng($this->getRandomBackground());
         $secondBackground = imagecreatefrompng($this->getRandomBackground());
@@ -242,6 +230,24 @@ class Captcha implements CaptchaInterface
         closedir($dir);
 
         return __DIR__ . "/resources/{$this->type}/background/" . $files[rand(0, count($files) - 1)];
+    }
+
+    /**
+     * Поиск совпадения в списке введенных кодов
+     * @param string $code
+     * @return bool
+     */
+    private function checkAllCodeList(string $code)
+    {
+        if (empty($_SESSION[self::SESSION_CAPTCHA_NAME])) {
+            return false;
+        }
+        foreach ($_SESSION[self::SESSION_CAPTCHA_NAME] as $value) {
+            if (strtoupper($value) === strtoupper($code)) {
+                return true;
+            }
+            return false;
+        }
     }
 }
 
