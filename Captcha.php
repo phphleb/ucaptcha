@@ -246,8 +246,8 @@ class Captcha implements CaptchaInterface
             if (strtoupper($value) === strtoupper($code)) {
                 return true;
             }
-            return false;
         }
+        return false;
     }
 }
 
