@@ -76,30 +76,25 @@ class Captcha implements CaptchaInterface
         $this->type = in_array($type, self::TYPES) ? $type : self::TYPE_BASE;
 
         $_SESSION[self::SESSION_CAPTCHA_NAME][] = $this->getCode();
-        if(count($_SESSION[self::SESSION_CAPTCHA_NAME]) > self::MAX_LIST_VALUES) {
+        if (count($_SESSION[self::SESSION_CAPTCHA_NAME]) > self::MAX_LIST_VALUES) {
             array_shift($_SESSION[self::SESSION_CAPTCHA_NAME]);
         }
-        try {
-            $firstBackground = imagecreatefrompng($this->getRandomBackground());
-            $secondBackground = imagecreatefrompng($this->getRandomBackground());
+        $firstBackground = imagecreatefrompng($this->getRandomBackground());
+        $secondBackground = imagecreatefrompng($this->getRandomBackground());
 
-            imagesavealpha($secondBackground, true);
+        imagesavealpha($secondBackground, true);
 
-            $this->createSymbols($firstBackground);
+        $this->createSymbols($firstBackground);
 
-            if ($this->type === self::TYPE_3D) {
-                imagecopymerge($firstBackground, $secondBackground, 0, 0, 0, 0, 200, 120, rand(25, 35));
-            }
-
-            header('Content-type:image/png');
-            header('Cache-Control: max-age=3600, must-revalidate');
-            imagepng($firstBackground);
-            imagedestroy($firstBackground);
-            imagedestroy($secondBackground);
-
-        } catch (\Throwable $e) {
-            // Disable errors for incorrect profiles.
+        if ($this->type === self::TYPE_3D) {
+            imagecopymerge($firstBackground, $secondBackground, 0, 0, 0, 0, 200, 120, rand(25, 35));
         }
+
+        header('Content-type:image/png');
+        header('Cache-Control: max-age=3600, must-revalidate');
+        imagepng($firstBackground);
+        imagedestroy($firstBackground);
+        imagedestroy($secondBackground);
     }
 
     /**
@@ -143,16 +138,11 @@ class Captcha implements CaptchaInterface
 
         $angle = rand(-10, 10);
         $stamp = $this->imageResize($file, $width, $height);
-        try {
-            $stamp = imagerotate($stamp, $angle, imageColorAllocateAlpha($stamp, 0, 0, 0, 127));
-            imagealphablending($stamp, false);
-            imagealphablending($stamp, true);
+        $stamp = imagerotate($stamp, $angle, imageColorAllocateAlpha($stamp, 0, 0, 0, 127));
+        imagealphablending($stamp, false);
+        imagealphablending($stamp, true);
 
-            imagecopy($image, $stamp, $x, $y, 0, 0, imagesx($stamp), imagesy($stamp));
-
-        } catch (\Throwable $e) {
-            // Disabling errors for strict validation.
-        }
+        imagecopy($image, $stamp, $x, $y, 0, 0, imagesx($stamp), imagesy($stamp));
         return true;
     }
 
@@ -186,23 +176,19 @@ class Captcha implements CaptchaInterface
         $newHeight = !$useXRatio ? $height : floor($size[1] * $ratio);
         $newLeft = $useXRatio ? 0 : floor(($width - $newWidth) / 2);
         $newTop = !$useXRatio ? 0 : floor(($height - $newHeight) / 2);
-        try {
         $isrc = $function($file);
 
         $idest = imagecreatetruecolor($width, $height);
 
         //imagerotate ( $idest, 90 , 0 );
 
-            imagecolortransparent($idest, imagecolorallocate($idest, 0, 0, 0));
-            imagealphablending($idest, false);
-            imagesavealpha($idest, true);
+        imagecolortransparent($idest, imagecolorallocate($idest, 0, 0, 0));
+        imagealphablending($idest, false);
+        imagesavealpha($idest, true);
 
-            imagecopyresampled($idest, $isrc, $newLeft, $newTop, 0, 0, $newWidth, $newHeight, $size[0], $size[1]);
-            imagedestroy($isrc);
+        imagecopyresampled($idest, $isrc, $newLeft, $newTop, 0, 0, $newWidth, $newHeight, $size[0], $size[1]);
+        imagedestroy($isrc);
 
-        } catch (\Throwable $e) {
-            // Disabling errors for strict validation.
-        }
         return $idest;
     }
 
