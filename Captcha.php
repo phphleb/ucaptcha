@@ -26,6 +26,11 @@ class Captcha implements CaptchaInterface
 
     protected $type = self::TYPE_BASE;
 
+    public function construct()
+    {
+        error_reporting(0);
+    }
+
     /**
      * Was at least one captcha pass successful.
      * Было ли успешным хоть одно прохождение капчи.
