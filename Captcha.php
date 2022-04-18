@@ -66,7 +66,9 @@ class Captcha implements CaptchaInterface
      */
     public function createImage(string $type = self::TYPE_BASE)
     {
-        error_reporting(0);
+        ini_set('display_errors', 0);
+        ini_set('display_startup_errors', 0);
+        error_reporting(E_ALL);
 
         if (!isset($_SESSION)) @session_start();
 
