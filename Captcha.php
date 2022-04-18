@@ -68,7 +68,7 @@ class Captcha implements CaptchaInterface
     {
         ini_set('display_errors', 0);
         ini_set('display_startup_errors', 0);
-        error_reporting(E_ALL);
+        error_reporting(E_ALL & ~E_WARNING);
 
         if (!isset($_SESSION)) @session_start();
 
