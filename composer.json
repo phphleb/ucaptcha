@@ -19,8 +19,7 @@
     },
     "require": {
         "php": ">=7.0.0",
-        "ext-gd": "*",
-        "ext-imagick": "*"
+        "ext-gd": "*"
     },
     "minimum-stability": "dev"
 
