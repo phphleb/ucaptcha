@@ -175,7 +175,7 @@ class Captcha implements CaptchaInterface
         $newHeight = !$useXRatio ? $height : floor($size[1] * $ratio);
         $newLeft = $useXRatio ? 0 : floor(($width - $newWidth) / 2);
         $newTop = !$useXRatio ? 0 : floor(($height - $newHeight) / 2);
-        $isrc = $function($file);
+        $isrc = @$function($file);
 
         $idest = imagecreatetruecolor($width, $height);
 
