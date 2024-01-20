@@ -18,9 +18,8 @@
         }
     },
     "require": {
-        "php": ">=7.0.0",
+        "php": ">7.0.0",
         "ext-gd": "*"
     },
     "minimum-stability": "dev"
-
 }
