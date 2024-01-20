@@ -1,8 +1,7 @@
 UCaptcha
 =====================
 
-![PHP](https://img.shields.io/badge/PHP->7.0-blue)
-[![License: MIT](https://img.shields.io/badge/License-MIT%20(Free)-brightgreen.svg)](https://github.com/phphleb/hleb/blob/master/LICENSE)
+![PHP](https://img.shields.io/badge/PHP->7.0-blue) [![License: MIT](https://img.shields.io/badge/License-MIT%20(Free)-brightgreen.svg)](https://github.com/phphleb/hleb/blob/master/LICENSE)
 
  ![CAPTCHA EXAMPLE](https://raw.githubusercontent.com/phphleb/ucaptcha/d474f82c23f5f97d615b2c3b405927f293b02a2d/resources/dark.png)
  
