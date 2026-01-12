@@ -29,12 +29,18 @@ class Captcha implements CaptchaInterface
     protected $type = self::TYPE_BASE;
 
     /**
+     * @var array|null
+     */
+    protected $session = null;
+
+    /**
      * For other session implementations, they can be set as an array.
      *
      * Для иных реализаций сессий их можно установить как массив.
      */
-    public function __construct(protected array|null $session = null)
+    public function __construct(?array $session = null)
     {
+        $this->session = $session;
     }
 
     /**
@@ -115,8 +121,8 @@ class Captcha implements CaptchaInterface
     public function createImage(string $type = self::TYPE_BASE, bool $withoutHeaders = false, bool $withoutErrors = true)
     {
         if ($withoutErrors) {
-            \ini_set('display_errors', 0);
-            \ini_set('display_startup_errors', 0);
+            \ini_set('display_errors', '0');
+            \ini_set('display_startup_errors', '0');
             \error_reporting(E_ALL & ~E_WARNING);
         }
 
