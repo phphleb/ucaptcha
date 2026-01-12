@@ -150,8 +150,11 @@ class Captcha implements CaptchaInterface
             \header('Cache-Control: max-age=3600, must-revalidate');
         }
         \imagepng($firstBackground);
-        \imagedestroy($firstBackground);
-        \imagedestroy($secondBackground);
+
+        if (PHP_VERSION_ID < 80000) {
+            \imagedestroy($firstBackground);
+            \imagedestroy($secondBackground);
+        }
     }
 
     /**
@@ -253,7 +256,10 @@ class Captcha implements CaptchaInterface
         \imagesavealpha($idest, true);
 
         \imagecopyresampled($idest, $isrc, (int)$newLeft, (int)$newTop, 0, 0, (int)$newWidth, (int)$newHeight, (int)$size[0], (int)$size[1]);
-        \imagedestroy($isrc);
+
+        if (PHP_VERSION_ID < 80000) {
+            \imagedestroy($isrc);
+        }
 
         return $idest;
     }
